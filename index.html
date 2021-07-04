@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="https://code.jquery.com/pep/0.4.3/pep.js"></script>
+		<script src="https://cdn.babylonjs.com/babylon.max.js"></script>
+        <script src="https://cdn.babylonjs.com/loaders/babylonjs.loaders.min.js"></script>
+        <script src="https://cdn.babylonjs.com/gui/babylon.gui.js"></script>
+        <meta charset="UTF-8">
+        <title></title>
+        <style>
+            html, body {
+                overflow: hidden;
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                padding: 0;
+            }
+
+            #renderCanvas {
+                width: 100%;
+                height: 100%;
+                touch-action: none;
+            }
+        </style>
+    </head>
+    <body>
+		<canvas id="renderCanvas" touch-action="none"></canvas> <!-- touch-action="none" for best results from PEP -->
+
+	    <script>
+
+	        const canvas = document.getElementById("renderCanvas"); // Get the canvas element
+	        const engine = new BABYLON.Engine(canvas, true); // Generate the BABYLON 3D engine
+            const currScene = {
+                value: 0
+            }
+
+            var createScene1 = function () {
+			    // This creates a basic Babylon Scene object (non-mesh)
+			    var scene = new BABYLON.Scene(engine);
+
+			   BABYLON.SceneLoader.Append("./", "esc 1 intro selva.glb", scene, function (scene) {
+                        scene.activeCamera.alpha += Math.PI;
+                });
+                // Parameters: name, position, scene
+                var camera = new BABYLON.FlyCamera("FlyCamera",
+                //Camara para escena 4
+                new BABYLON.Vector3(-10.765586171687966, 8.29945017076806, 0.38507657992785527)
+                ////Camara para escena 9
+                //new BABYLON.Vector3(-8.237188435736542, 21.294068433788446, 0.8196431755394826);
+                , scene);
+                var light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0, 1, 0), scene);
+
+                // Default intensity is 1. Let's dim the light a small amount
+                light.intensity = 0.7;
+                // Airplane like rotation, with faster roll correction and banked-turns.
+                // Default is 100. A higher number means slower correction.
+                camera.rollCorrect = 1;
+                // Default is false.
+                camera.bankedTurn = false;
+                // Defaults to 90° in radians in how far banking will roll the camera.
+                camera.bankedTurnLimit = Math.PI / 2;
+                // How much of the Yawing (turning) will affect the Rolling (banked-turn.)
+                // Less than 1 will reduce the Rolling, and more than 1 will increase it.
+                camera.bankedTurnMultiplier = 0;
+                // This attaches the camera to the canvas
+                camera.attachControl(canvas, true);
+                //camera.inputs.remove(camera.inputs.attached.keyboard);
+                camera.inputs.attached.mouse.buttonsRoll = [];
+                camera.inputs.rebuildInputCheck();
+
+                const plane = BABYLON.MeshBuilder.CreatePlane("plane", {
+                    size: 2,
+                    width: 1,
+                    height: 2,
+                    updatable: false,
+                    sideOrientation: BABYLON.Mesh.DOUBLESIDE
+                }, scene);
+                plane.position = new BABYLON.Vector3(-38.765586171687966, 94.29945017076806, -332.38507657992785527);
+                plane.rotation = new BABYLON.Vector3(0, Math.PI / 2.5 ,0);
+                plane.actionManager = new BABYLON.ActionManager(scene);
+                plane.actionManager.registerAction(
+                    new BABYLON.SetValueAction(
+                        BABYLON.ActionManager.OnPickTrigger,
+                        currScene,
+                        'value',
+                        1
+                    )
+                ).then(
+                    new BABYLON.SetValueAction(
+                        BABYLON.ActionManager.NothingTrigger,
+                        plane,
+                        'visibility',
+                        0
+                    )
+                );
+
+                var advancedTexture = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
+
+                var text1 = new BABYLON.GUI.TextBlock();
+                text1.text = "Hello world";
+                text1.color = "white";
+                text1.fontSize = 24;
+                advancedTexture.addControl(text1);
+                scene.onBeforeDrawPhaseObservable.add(function() {
+                    text1.text = scene.activeCamera.position.toString();
+                });
+			    return scene;
+			};
+
+            var createScene2 = function () {
+			    // This creates a basic Babylon Scene object (non-mesh)
+			    var scene = new BABYLON.Scene(engine);
+
+			   BABYLON.SceneLoader.Append("./", "esc 2-3 bioluminiscencia i2.glb", scene, function (scene) {
+                        scene.activeCamera.alpha += Math.PI;
+                });
+                // Parameters: name, position, scene
+                var camera = new BABYLON.FlyCamera("FlyCamera",
+                //Camara para escena 4
+                new BABYLON.Vector3(-10.765586171687966, 8.29945017076806, 0.38507657992785527)
+                ////Camara para escena 9
+                //new BABYLON.Vector3(-8.237188435736542, 21.294068433788446, 0.8196431755394826);
+                , scene);
+                var light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0, 1, 0), scene);
+
+                // Default intensity is 1. Let's dim the light a small amount
+                light.intensity = 0.7;
+                // Airplane like rotation, with faster roll correction and banked-turns.
+                // Default is 100. A higher number means slower correction.
+                camera.rollCorrect = 1;
+                // Default is false.
+                camera.bankedTurn = false;
+                // Defaults to 90° in radians in how far banking will roll the camera.
+                camera.bankedTurnLimit = Math.PI / 2;
+                // How much of the Yawing (turning) will affect the Rolling (banked-turn.)
+                // Less than 1 will reduce the Rolling, and more than 1 will increase it.
+                camera.bankedTurnMultiplier = 0;
+                // This attaches the camera to the canvas
+                camera.attachControl(canvas, true);
+                //camera.inputs.remove(camera.inputs.attached.keyboard);
+                camera.inputs.attached.mouse.buttonsRoll = [];
+                camera.inputs.rebuildInputCheck();
+
+                const plane = BABYLON.MeshBuilder.CreatePlane("plane", {
+                    size: 2,
+                    width: 1,
+                    height: 2,
+                    updatable: false,
+                    sideOrientation: BABYLON.Mesh.DOUBLESIDE
+                }, scene);
+                plane.position = new BABYLON.Vector3(-20, 20.29945017076806, 8.38507657992785527);
+                plane.rotation = new BABYLON.Vector3(0, Math.PI / 2.5 ,0);
+                plane.actionManager = new BABYLON.ActionManager(scene);
+                plane.actionManager.registerAction(
+                    new BABYLON.SetValueAction(
+                        BABYLON.ActionManager.OnPickTrigger,
+                        currScene,
+                        'value',
+                        2
+                    )
+                ).then(
+                    new BABYLON.SetValueAction(
+                        BABYLON.ActionManager.NothingTrigger,
+                        plane,
+                        'visibility',
+                        0
+                    )
+                );
+			    return scene;
+			};
+
+	        // Add your code here matching the playground format
+			var createScene4 = function () {
+			    // This creates a basic Babylon Scene object (non-mesh)
+			    var scene = new BABYLON.Scene(engine);
+
+			   BABYLON.SceneLoader.Append("./", "esc 4 fosil i2.glb", scene, function (scene) {
+                        scene.activeCamera.alpha += Math.PI;
+                });
+                // Parameters: name, position, scene
+                var camera = new BABYLON.FlyCamera("FlyCamera",
+                //Camara para escena 4
+                new BABYLON.Vector3(-10.765586171687966, 8.29945017076806, 0.38507657992785527)
+                ////Camara para escena 9
+                //new BABYLON.Vector3(-8.237188435736542, 21.294068433788446, 0.8196431755394826);
+                , scene);
+                var light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0, 1, 0), scene);
+
+                // Default intensity is 1. Let's dim the light a small amount
+                light.intensity = 0.7;
+                // Airplane like rotation, with faster roll correction and banked-turns.
+                // Default is 100. A higher number means slower correction.
+                camera.rollCorrect = 1;
+                // Default is false.
+                camera.bankedTurn = false;
+                // Defaults to 90° in radians in how far banking will roll the camera.
+                camera.bankedTurnLimit = Math.PI / 2;
+                // How much of the Yawing (turning) will affect the Rolling (banked-turn.)
+                // Less than 1 will reduce the Rolling, and more than 1 will increase it.
+                camera.bankedTurnMultiplier = 0;
+                // This attaches the camera to the canvas
+                camera.attachControl(canvas, true);
+                //camera.inputs.remove(camera.inputs.attached.keyboard);
+                camera.inputs.attached.mouse.buttonsRoll = [];
+                camera.inputs.rebuildInputCheck();
+
+                const plane = BABYLON.MeshBuilder.CreatePlane("plane", {
+                    size: 2,
+                    width: 1,
+                    height: 2,
+                    updatable: false,
+                    sideOrientation: BABYLON.Mesh.DOUBLESIDE
+                }, scene);
+                plane.position = new BABYLON.Vector3(-8, 8.29945017076806, 1.38507657992785527);
+                plane.rotation = new BABYLON.Vector3(0, Math.PI / 2.5 ,0);
+                plane.actionManager = new BABYLON.ActionManager(scene);
+                plane.actionManager.registerAction(
+                    new BABYLON.SetValueAction(
+                        BABYLON.ActionManager.OnPickTrigger,
+                        currScene,
+                        'value',
+                        3
+                    )
+                ).then(
+                    new BABYLON.SetValueAction(
+                        BABYLON.ActionManager.NothingTrigger,
+                        plane,
+                        'visibility',
+                        0
+                    )
+                );
+			    return scene;
+			};
+
+            var createScene5 = function () {
+			    // This creates a basic Babylon Scene object (non-mesh)
+			    var scene = new BABYLON.Scene(engine);
+
+			   BABYLON.SceneLoader.Append("./", "esc 5 meteorito i2.glb", scene, function (scene) {
+                        scene.activeCamera.alpha += Math.PI;
+                });
+                // Parameters: name, position, scene
+                var camera = new BABYLON.FlyCamera("FlyCamera",
+                //Camara para escena 4
+                new BABYLON.Vector3(-10.765586171687966, 8.29945017076806, 0.38507657992785527)
+                ////Camara para escena 9
+                //new BABYLON.Vector3(-8.237188435736542, 21.294068433788446, 0.8196431755394826);
+                , scene);
+                var light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0, 1, 0), scene);
+
+                // Default intensity is 1. Let's dim the light a small amount
+                light.intensity = 0.7;
+                // Airplane like rotation, with faster roll correction and banked-turns.
+                // Default is 100. A higher number means slower correction.
+                camera.rollCorrect = 1;
+                // Default is false.
+                camera.bankedTurn = false;
+                // Defaults to 90° in radians in how far banking will roll the camera.
+                camera.bankedTurnLimit = Math.PI / 2;
+                // How much of the Yawing (turning) will affect the Rolling (banked-turn.)
+                // Less than 1 will reduce the Rolling, and more than 1 will increase it.
+                camera.bankedTurnMultiplier = 0;
+                // This attaches the camera to the canvas
+                camera.attachControl(canvas, true);
+                //camera.inputs.remove(camera.inputs.attached.keyboard);
+                camera.inputs.attached.mouse.buttonsRoll = [];
+                camera.inputs.rebuildInputCheck();
+
+                const plane = BABYLON.MeshBuilder.CreatePlane("plane", {
+                    size: 2,
+                    width: 1,
+                    height: 2,
+                    updatable: false,
+                    sideOrientation: BABYLON.Mesh.DOUBLESIDE
+                }, scene);
+                plane.position = new BABYLON.Vector3(-8, 8.29945017076806, 1.38507657992785527);
+                plane.rotation = new BABYLON.Vector3(0, Math.PI / 2.5 ,0);
+                plane.actionManager = new BABYLON.ActionManager(scene);
+                plane.actionManager.registerAction(
+                    new BABYLON.SetValueAction(
+                        BABYLON.ActionManager.OnPickTrigger,
+                        currScene,
+                        'value',
+                        4
+                    )
+                ).then(
+                    new BABYLON.SetValueAction(
+                        BABYLON.ActionManager.NothingTrigger,
+                        plane,
+                        'visibility',
+                        0
+                    )
+                );
+
+                const plane2 = BABYLON.MeshBuilder.CreatePlane("plane", {
+                    size: 2,
+                    width: 1,
+                    height: 2,
+                    updatable: false,
+                    sideOrientation: BABYLON.Mesh.DOUBLESIDE
+                }, scene);
+                plane2.position = new BABYLON.Vector3(-8, 8.29945017076806, -1.38507657992785527);
+                plane2.rotation = new BABYLON.Vector3(0, Math.PI / -2.5 ,0);
+                plane2.actionManager = new BABYLON.ActionManager(scene);
+                plane2.actionManager.registerAction(
+                    new BABYLON.SetValueAction(
+                        BABYLON.ActionManager.OnPickTrigger,
+                        currScene,
+                        'value',
+                        6
+                    )
+                ).then(
+                    new BABYLON.SetValueAction(
+                        BABYLON.ActionManager.NothingTrigger,
+                        plane2,
+                        'visibility',
+                        0
+                    )
+                );
+
+
+                 height = 4
+                 depth = .6
+
+                 var outputplaneTexture = new BABYLON.DynamicTexture("dynamic texture", 1024, scene, true);
+                 outputplaneTexture.hasAlpha = true;
+
+                 var outputplane = BABYLON.Mesh.CreatePlane("outputplane", 1, scene, false);
+                 outputplane.sideOrientation= BABYLON.Mesh.DOUBLESIDE;
+                 // outputplane.billboardMode = BABYLON.AbstractMesh.BILLBOARDMODE_ALL;
+                 outputplane.material = new BABYLON.StandardMaterial("outputplane", scene);
+                 outputplane.material.specularColor = new BABYLON.Color3(0, 0, 0, 0);
+                 outputplane.scaling.y = height;
+                 //outputplane.scaling.x =1
+
+                 // thinking outside the box??
+
+                 outputplane.material.specularColor = new BABYLON.Color3(0, 0, 0);
+                 outputplane.material.emissiveColor = new BABYLON.Color3(0, 0, 0);
+                 outputplane.material.diffuseTexture = outputplaneTexture;
+                 var context2D = outputplaneTexture.getContext();
+                 context2D.clearRect(0, 0, 1024, 1024);
+
+                 outputplaneTexture.uScale = 1 / height;
+                 outputplaneTexture.uOffset = 0;
+                 outputplane.position = new BABYLON.Vector3(-8, 8.29945017076806, 1.28507657992785527);
+                 outputplane.rotation = new BABYLON.Vector3(0, Math.PI / 2.5 ,0);
+                 fontsize = 16
+                 outputplaneTexture.drawText("Weyanen Yuum Cháak, cha' in",0,18 * 102.3333333 / height + fontsize / 3.3333333, fontsize + "px verdana", "red", "transparent", true); outputplaneTexture.drawText("wokol ta jobnel.",0, 20 * 102.3333333 / height + fontsize / 3.3333333, fontsize + "px verdana", "red", "transparent", true);
+                 outputplaneTexture.drawText("Aquí me presento ante tí, Yuum Cháak, permíteme adentrarme en tus entrañas.", 0, 22 * 102.3333333 / height + fontsize / 3.3333333, fontsize + "px verdana", "red", "transparent", true);
+                 // don't understand the relation between font size, x & y positioning
+
+
+			    return scene;
+			};
+
+            var createScene6 = function () {
+			    // This creates a basic Babylon Scene object (non-mesh)
+			    var scene = new BABYLON.Scene(engine);
+
+			   BABYLON.SceneLoader.Append("./", "esc 6 tzuukan i2.glb", scene, function (scene) {
+                        scene.activeCamera.alpha += Math.PI;
+                });
+                // Parameters: name, position, scene
+                var camera = new BABYLON.FlyCamera("FlyCamera",
+                //Camara para escena 4
+                new BABYLON.Vector3(-10.765586171687966, 8.29945017076806, 0.38507657992785527)
+                ////Camara para escena 9
+                //new BABYLON.Vector3(-8.237188435736542, 21.294068433788446, 0.8196431755394826);
+                , scene);
+                var light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0, 1, 0), scene);
+
+                // Default intensity is 1. Let's dim the light a small amount
+                light.intensity = 0.7;
+                // Airplane like rotation, with faster roll correction and banked-turns.
+                // Default is 100. A higher number means slower correction.
+                camera.rollCorrect = 1;
+                // Default is false.
+                camera.bankedTurn = false;
+                // Defaults to 90° in radians in how far banking will roll the camera.
+                camera.bankedTurnLimit = Math.PI / 2;
+                // How much of the Yawing (turning) will affect the Rolling (banked-turn.)
+                // Less than 1 will reduce the Rolling, and more than 1 will increase it.
+                camera.bankedTurnMultiplier = 0;
+                // This attaches the camera to the canvas
+                camera.attachControl(canvas, true);
+                //camera.inputs.remove(camera.inputs.attached.keyboard);
+                camera.inputs.attached.mouse.buttonsRoll = [];
+                camera.inputs.rebuildInputCheck();
+
+                const plane = BABYLON.MeshBuilder.CreatePlane("plane", {
+                    size: 2,
+                    width: 1,
+                    height: 2,
+                    updatable: false,
+                    sideOrientation: BABYLON.Mesh.DOUBLESIDE
+                }, scene);
+                plane.position = new BABYLON.Vector3(-8, 8.29945017076806, 1.38507657992785527);
+                plane.rotation = new BABYLON.Vector3(0, Math.PI / 2.5 ,0);
+                plane.actionManager = new BABYLON.ActionManager(scene);
+                plane.actionManager.registerAction(
+                    new BABYLON.SetValueAction(
+                        BABYLON.ActionManager.OnPickTrigger,
+                        currScene,
+                        'value',
+                        5
+                    )
+                ).then(
+                    new BABYLON.SetValueAction(
+                        BABYLON.ActionManager.NothingTrigger,
+                        plane,
+                        'visibility',
+                        0
+                    )
+                );
+			    return scene;
+			};
+
+			var createScene9 = function () {
+			    // This creates a basic Babylon Scene object (non-mesh)
+			    var scene = new BABYLON.Scene(engine);
+
+			   BABYLON.SceneLoader.Append("./", "esc 9 distopia i2.glb", scene, function (scene) {
+                        scene.activeCamera.alpha += Math.PI;
+                });
+                // Parameters: name, position, scene
+                var camera = new BABYLON.FlyCamera("FlyCamera",
+                //Camara para escena 9
+                new BABYLON.Vector3(-8.237188435736542, 21.294068433788446, 0.8196431755394826)
+                , scene);
+                var light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0, 1, 0), scene);
+
+                // Default intensity is 1. Let's dim the light a small amount
+                light.intensity = 0.7;
+                // Airplane like rotation, with faster roll correction and banked-turns.
+                // Default is 100. A higher number means slower correction.
+                camera.rollCorrect = 1;
+                // Default is false.
+                camera.bankedTurn = false;
+                // Defaults to 90° in radians in how far banking will roll the camera.
+                camera.bankedTurnLimit = Math.PI / 2;
+                // How much of the Yawing (turning) will affect the Rolling (banked-turn.)
+                // Less than 1 will reduce the Rolling, and more than 1 will increase it.
+                camera.bankedTurnMultiplier = 0;
+                // This attaches the camera to the canvas
+                camera.attachControl(canvas, true);
+                //camera.inputs.remove(camera.inputs.attached.keyboard);
+                camera.inputs.attached.mouse.buttonsRoll = [];
+                camera.inputs.rebuildInputCheck();
+
+
+
+			    return scene;
+			};
+
+            var createScene10 = function () {
+			    // This creates a basic Babylon Scene object (non-mesh)
+			    var scene = new BABYLON.Scene(engine);
+
+			   BABYLON.SceneLoader.Append("./", "esc 10 fertilidad i2.glb", scene, function (scene) {
+                        scene.activeCamera.alpha += Math.PI;
+                });
+                // Parameters: name, position, scene
+                var camera = new BABYLON.FlyCamera("FlyCamera",
+                //Camara para escena 9
+                new BABYLON.Vector3(-8.237188435736542, 21.294068433788446, 0.8196431755394826)
+                , scene);
+                var light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0, 1, 0), scene);
+
+                // Default intensity is 1. Let's dim the light a small amount
+                light.intensity = 0.7;
+                // Airplane like rotation, with faster roll correction and banked-turns.
+                // Default is 100. A higher number means slower correction.
+                camera.rollCorrect = 1;
+                // Default is false.
+                camera.bankedTurn = false;
+                // Defaults to 90° in radians in how far banking will roll the camera.
+                camera.bankedTurnLimit = Math.PI / 2;
+                // How much of the Yawing (turning) will affect the Rolling (banked-turn.)
+                // Less than 1 will reduce the Rolling, and more than 1 will increase it.
+                camera.bankedTurnMultiplier = 0;
+                // This attaches the camera to the canvas
+                camera.attachControl(canvas, true);
+                //camera.inputs.remove(camera.inputs.attached.keyboard);
+                camera.inputs.attached.mouse.buttonsRoll = [];
+                camera.inputs.rebuildInputCheck();
+
+
+			    return scene;
+			};
+
+            const scene1 = createScene1();
+            const scene2 = createScene2();
+	        const scene4 = createScene4(); //Call the createScene function
+            const scene5 = createScene5();
+            const scene6 = createScene6();
+            const scene9 = createScene9();
+            const scene10 = createScene10();
+
+            var bg4 = new BABYLON.Sound("esc4", "escena 2 acuiferal ambiente.wav", scene4, null, {
+              loop: true,
+              autoplay: true,
+              spatialSound: true
+            });
+            var bg5 = new BABYLON.Sound("esc6", "escena 3 acuiferal ambiente.wav", scene5, null, {
+              loop: true,
+              autoplay: true,
+              spatialSound: true
+            });
+            bg4.stop();
+            bg5.stop();
+
+	        // Register a render loop to repeatedly render the scene
+	        engine.runRenderLoop(function () {
+                switch(currScene.value){
+                    case 0:
+                        scene1.render();
+                        bg5.stop();
+                        if(!bg4.isPlaying){
+                            bg4.play();
+                        }
+                        break;
+                    case 1:
+                        scene2.render();
+                        bg4.stop();
+                        if(!bg5.isPlaying){
+                            bg5.play();
+                        }
+                        break;
+                    case 2:
+                        scene4.render();
+                        break;
+                    case 3:
+                        scene5.render();
+                        break;
+                    case 4:
+                        scene6.render();
+                        break;
+                    case 5:
+                        scene9.render();
+                        break;
+                    case 10:
+                        scene10.render();
+                        break;
+                }
+                    //console.log(scene.activeCamera.position);
+                    // scene.activeCamera.position = new BABYLON.Vector3(-5.163004866170426, 8.41834753321304, 9.298796831063914);
+	        });
+
+	        // Watch for browser/canvas resize events
+	        window.addEventListener("resize", function () {
+	                engine.resize();
+	        });
+	    </script>
+    </body>
+</html>
